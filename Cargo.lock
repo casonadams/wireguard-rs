@@ -307,8 +307,7 @@ dependencies = [
 [[package]]
 name = "netlink-packet-wireguard"
 version = "0.2.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "60b25b050ff1f6a1e23c6777b72db22790fe5b6b5ccfd3858672587a79876c8f"
+source = "git+https://github.com/casonadams/netlink-packet-wireguard.git#f2d8c9f19638f335b22e68f8c27c60b9ecbad964"
 dependencies = [
  "anyhow",
  "byteorder",
