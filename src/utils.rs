@@ -95,7 +95,7 @@ pub(crate) fn clear_dns(ifname: &str) -> Result<(), WireguardInterfaceError> {
 #[cfg(target_os = "linux")]
 const DEFAULT_FWMARK_TABLE: u32 = 51820;
 
-/// Helper function to add routing.  
+/// Helper function to add routing.
 #[cfg(target_os = "linux")]
 pub(crate) fn add_peer_routing(
     peers: &[Peer],
@@ -135,7 +135,7 @@ pub(crate) fn add_peer_routing(
                         .output()?;
                     if output.stdout.is_empty() {
                         host.fwmark = Some(table);
-                        netlink::set_host(ifname, &host)?;
+                        netlink::set_host(ifname, &host, Some(1280))?;
                         debug!("Assigned fwmark: {table}");
                         break;
                     } else {
@@ -179,7 +179,7 @@ pub(crate) fn add_peer_routing(
     Ok(())
 }
 
-/// Helper function to add routing.  
+/// Helper function to add routing.
 #[cfg(any(target_os = "macos", target_os = "freebsd"))]
 pub(crate) fn add_peer_routing(
     peers: &[Peer],

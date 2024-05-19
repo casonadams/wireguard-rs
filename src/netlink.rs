@@ -348,11 +348,19 @@ pub fn get_host(ifname: &str) -> NetlinkResult<Host> {
 }
 
 /// Perform interface configuration
-pub fn set_host(ifname: &str, host: &Host) -> NetlinkResult<()> {
+pub fn set_host(ifname: &str, host: &Host, mtu: Option<u16>) -> NetlinkResult<()> {
+    let mut nlas = host.as_nlas(ifname); // Get WireGuard-specific NLAs
+
+    if let Some(mtu) = mtu {
+        let mtu_attr = WgDeviceAttrs::Mtu(mtu);
+        nlas.push(mtu_attr); // Add MTU attribute to the WireGuard NLAs
+    }
+
     let genlmsg = GenlMessage::from_payload(Wireguard {
         cmd: WireguardCmd::SetDevice,
-        nlas: host.as_nlas(ifname),
+        nlas,
     });
+
     netlink_request_genl(genlmsg, NLM_F_REQUEST | NLM_F_ACK)?;
     Ok(())
 }
